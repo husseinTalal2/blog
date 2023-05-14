@@ -18,7 +18,9 @@
                           <h6 class="card-subtitle mb-2 text-muted">Author: {{ $post->user->name }}</h6>
                       </div>
                       <div class="card-body">
-                          <p class="card-text">{{ $post->body }}</p>
+                          <p class="card-text mb-4">{{ $post->body }}</p>
+                          <a href="{{ route('posts.edit', $post) }}" class="btn btn-primary">Edit</a>
+                          <button id="delete-post-btn" class="btn btn-danger">Delete</button>
                       </div>
                   </div>
                 </a>
@@ -28,3 +30,4 @@
    </div>
 </div>
 @endsection
+

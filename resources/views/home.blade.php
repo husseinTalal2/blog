@@ -12,7 +12,51 @@
                         <p class="card-text">Comments: {{ $post->comments_count }}</p>
                     </div>
                 </a>
+                <form class="d-flex mx-2 mb-2 comment-form" data-post-id="{{ $post->id }}">
+                    @csrf
+                    <input name="body" class="form-control" placeholder="Write a comment"></input>
+                    <button type="submit" class="btn btn-primary ml-2">Submit</button>
+                </form>
             </div>
         @endforeach
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const commentForms = document.querySelectorAll('.comment-form');
+        // const commentForms = $('.your-class');
+            console.log("from scripts");
+        commentForms.forEach(form => {
+            console.log("forms");
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+    
+                const postId = this.dataset.postId;
+                const body = this.querySelector('input[name="body"]').value;
+    
+                fetch(`/posts/${postId}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ body: body })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload(); // Refresh the page
+                    } else {
+                        throw new Error('Error creating comment');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            });
+        });
+    });
+    
+    </script>
+@endsection
+
+@section('script')
 @endsection
